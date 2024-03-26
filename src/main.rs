@@ -1,11 +1,19 @@
 use std::io::{self, BufRead};
-use std::process::exit;
 
 use atty::Stream;
 use clap::{Parser, Subcommand};
-use log::error;
 
 mod commands;
+
+#[macro_export]
+macro_rules! error_and_exit {
+    ($($arg:tt)*) => {
+        {
+            log::error!($($arg)*);
+            std::process::exit(1);
+        }
+    };
+}
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
@@ -18,13 +26,6 @@ struct Cli {
 enum Commands {
     Filter(commands::filter::Filter),
     Sort(commands::sort::Sort),
-}
-
-macro_rules! error_and_exit {
-    ($($arg:tt)*) => {
-        error!($($arg)*);
-        exit(1);
-    };
 }
 
 fn main() {
