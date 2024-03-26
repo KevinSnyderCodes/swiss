@@ -7,7 +7,7 @@ use strum::IntoEnumIterator;
 
 #[derive(Args)]
 pub struct Sort {
-    #[clap(short, long, default_value = "auto")]
+    #[clap(long, default_value = "auto")]
     format: SortFormat,
 }
 
