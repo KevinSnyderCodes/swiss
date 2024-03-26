@@ -2,6 +2,7 @@ use std::collections::HashSet;
 use std::net::Ipv4Addr;
 
 use clap::Args;
+use log::info;
 use strum::IntoEnumIterator;
 
 #[derive(Args)]
@@ -50,15 +51,15 @@ impl Sort {
             let formats = get_formats(lines);
             match formats.len() {
                 0 => {
-                    println!("No matching formats found, defaulting to alphanumeric");
+                    info!("No matching formats found, defaulting to alphanumeric");
                     format = SortFormat::Alphanumeric;
                 }
                 1 => {
-                    println!("One matching format found");
+                    info!("One matching format found");
                     format = formats.iter().next().unwrap().clone();
                 }
                 _ => {
-                    println!("Multiple matching formats found, defaulting to alphanumeric");
+                    info!("Multiple matching formats found, defaulting to alphanumeric");
                     format = SortFormat::Alphanumeric;
                 }
             }

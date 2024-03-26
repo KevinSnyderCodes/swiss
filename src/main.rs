@@ -1,8 +1,9 @@
 use std::io::{self, BufRead};
+use std::process::exit;
 
 use atty::Stream;
 use clap::{Parser, Subcommand};
-use core::panic;
+use log::error;
 
 mod commands;
 
@@ -18,9 +19,24 @@ enum Commands {
     Sort(commands::sort::Sort),
 }
 
+macro_rules! error_and_exit {
+    ($($arg:tt)*) => {
+        error!($($arg)*);
+        exit(1);
+    };
+}
+
 fn main() {
+    let cli = Cli::parse();
+
+    stderrlog::new()
+        .module(module_path!())
+        .verbosity(stderrlog::LogLevelNum::Info)
+        .init()
+        .unwrap();
+
     if atty::is(Stream::Stdin) {
-        panic!("No input provided");
+        error_and_exit!("No input provided");
     }
 
     let mut lines = io::stdin()
@@ -29,12 +45,10 @@ fn main() {
         .collect::<Result<Vec<_>, _>>()
         .unwrap();
 
-    let cli = Cli::parse();
-
     match cli.command {
         Some(Commands::Sort(sort)) => sort.run(&mut lines),
         None => {
-            panic!("No command provided");
+            error_and_exit!("No command provided");
         }
     }
 

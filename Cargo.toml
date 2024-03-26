@@ -8,4 +8,6 @@ edition = "2021"
 [dependencies]
 atty = "0.2.14"
 clap = { version = "4.5.3", features = ["derive"] }
+log = "0.4.21"
+stderrlog = "0.6.0"
 strum = { version = "0.26.2", features = ["derive"] }
