@@ -1,7 +1,10 @@
+use std::io::{self, BufRead};
+
 use atty::Stream;
 use clap::{Parser, Subcommand};
 use core::panic;
-use std::io::{self, BufRead};
+
+mod commands;
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
@@ -12,7 +15,7 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    Sort,
+    Sort(commands::sort::Sort),
 }
 
 fn main() {
@@ -29,7 +32,7 @@ fn main() {
     let cli = Cli::parse();
 
     match cli.command {
-        Some(Commands::Sort) => lines.sort(),
+        Some(Commands::Sort(sort)) => sort.run(&mut lines),
         None => {
             panic!("No command provided");
         }
