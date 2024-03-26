@@ -16,6 +16,7 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
+    Filter(commands::filter::Filter),
     Sort(commands::sort::Sort),
 }
 
@@ -46,6 +47,7 @@ fn main() {
         .unwrap();
 
     match cli.command {
+        Some(Commands::Filter(filter)) => filter.run(&mut lines),
         Some(Commands::Sort(sort)) => sort.run(&mut lines),
         None => {
             error_and_exit!("No command provided");
